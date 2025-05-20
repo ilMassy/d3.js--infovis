@@ -1,0 +1,13 @@
+.clickableRect:hover {
+      stroke: #000;
+      stroke-width: 2px;
+}
+
+.clickableTriangle:hover {
+      stroke: #000;
+      stroke-width: 2px;
+}
+
+.casetta {
+    cursor: pointer;
+}

@@ -1,0 +1,12 @@
+[
+  { "id": 1, "baseHeight": 60, "baseWidth": 25, "roofHeight": 22, "roofWidth": 35 },
+  { "id": 2, "baseHeight": 65, "baseWidth": 28, "roofHeight": 24, "roofWidth": 35 },
+  { "id": 3, "baseHeight": 72, "baseWidth": 28, "roofHeight": 18, "roofWidth": 36 },
+  { "id": 4, "baseHeight": 79, "baseWidth": 45, "roofHeight": 38, "roofWidth": 54 },
+  { "id": 5, "baseHeight": 51, "baseWidth": 28, "roofHeight": 15, "roofWidth": 37 },
+  { "id": 6, "baseHeight": 64, "baseWidth": 32, "roofHeight": 16, "roofWidth": 40 },
+  { "id": 7, "baseHeight": 40, "baseWidth": 21, "roofHeight": 17, "roofWidth": 29 },
+  { "id": 8, "baseHeight": 64, "baseWidth": 38, "roofHeight": 17, "roofWidth": 40 },
+  { "id": 9, "baseHeight": 80, "baseWidth": 40, "roofHeight": 19, "roofWidth": 51 },
+  { "id": 10, "baseHeight": 65, "baseWidth": 28, "roofHeight": 24, "roofWidth": 35 }
+]
