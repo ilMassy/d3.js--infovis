@@ -164,7 +164,7 @@ function updateDrawing(data){
   currentData = data;
 
   // uniquely identify each element of the dataset
-  var houses = svg.selectAll("g.casetta").data(data, d => d.id);
+  var houses = svg.selectAll("g.house").data(data, d => d.id);
 
 
   // exit
@@ -173,7 +173,7 @@ function updateDrawing(data){
   // enter
   houses.enter()
     .append("g")
-    .attr("class", "casetta")
+    .attr("class", "house")
     .call(drawHouses);  
       
   // update
