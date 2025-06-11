@@ -89,6 +89,8 @@ function drawHouses(selection) {
     const baseWidth = xScale(d.baseWidth);   
     const houseHeight = yScale(d.baseHeight + d.roofHeight);   
     const roofWidth = xScale(d.roofWidth);  
+    const doorW = xScale(d3.min(currentData, d => d.baseWidth) / 4);
+    const doorH = yScale(d3.min(currentData, d => d.baseHeight) / 2);
           
     // definition of vertices of the polygon (triangle)
     const x1 = xCenter - roofWidth / 2,  y1 = baseHeight;
@@ -118,7 +120,19 @@ function drawHouses(selection) {
       .attr("fill", "red")
       .on("click", () => sortData("roofHeight", "roofWidth"));         /* sort houses after click by roofHeight and roofWidth 
                                                                         for cases with same roofHeight */ 
-    });
+    
+
+    // construction of the door
+    group.append("rect")
+      .attr("class", "clickableDoor")
+      .attr("x", xCenter - doorW / 2)
+      .attr("y", doorH)
+      .attr("width", doorW)
+      .attr("height", ((bandScale.bandwidth()) * 1.3) - doorH)
+      .attr("fill", "brown")
+      .on("click", () => sortWidth("baseWidth", "roofWidth"));        /* sort houses after click by max of baseWidth and roofWidth
+                                                                        for each houses */ 
+  });
 }
 
 // function for update houses
@@ -135,6 +149,8 @@ function updateHouses(selection) {
     const baseWidth = xScale(d.baseWidth);   
     const houseHeight = yScale(d.baseHeight + d.roofHeight);   
     const roofWidth = xScale(d.roofWidth); 
+    const doorW = xScale(d3.min(currentData, d => d.baseWidth) / 4);
+    const doorH = yScale(d3.min(currentData, d => d.baseHeight) / 2);
 
     const x1 = xCenter - roofWidth / 2,  y1 = baseHeight;
     const x2 = xCenter, y2 = houseHeight;
@@ -145,7 +161,7 @@ function updateHouses(selection) {
     // creation of the transition for the group
     const t = group.transition().duration(updateTime);
 
-    t.select("rect")
+    t.select("rect.clickableRect")
       .attr("x", xCenter - baseWidth / 2)
       .attr("y", baseHeight)
       .attr("width", baseWidth)
@@ -153,6 +169,12 @@ function updateHouses(selection) {
 
     t.select("polygon")
       .attr("points", pointsString);
+
+    t.select("rect.clickableDoor")
+      .attr("x", xCenter - doorW / 2)
+      .attr("y", doorH)
+      .attr("width", doorW)
+      .attr("height", ((bandScale.bandwidth()) * 1.3) - doorH);
   });
 }
 
@@ -194,6 +216,22 @@ function sortData(key1, key2) {
 
   updateDrawing(currentData);
 }
+
+// sorting by max of key1 and key2 for each houses
+function sortWidth(key1, key2) {
+  currentData.sort((a, b) =>
+    d3.ascending(
+      Math.max(a[key1], a[key2]),
+      Math.max(b[key1], b[key2])
+    )
+  );
+
+  console.log("Sorted dataset: ");
+  console.log(currentData);
+
+  updateDrawing(currentData);
+}
+
 
 // ----------------------------------------------------------- //
 

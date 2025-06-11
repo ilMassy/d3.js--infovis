@@ -8,6 +8,11 @@
       stroke-width: 2px;
 }
 
+.clickableDoor:hover {
+      stroke: #000;
+      stroke-width: 2px;
+}
+
 .house {
     cursor: pointer;
 }
