@@ -5,9 +5,9 @@ let currentData = [];
 var updateTime = 5000;
 
 // SVG object width and height
-var width = 925;
+var width = 1300;
 // height = width * 1.3 for initialization
-var height = 1202.5;
+var height = 1690;
 
 // ----------------------------------------------------------- //
 
@@ -86,11 +86,16 @@ function drawHouses(selection) {
           
     // scaled parameters
     const baseHeight = yScale(d.baseHeight);
-    const baseWidth = xScale(d.baseWidth);   
-    const houseHeight = yScale(d.baseHeight + d.roofHeight);   
+    const baseWidth = xScale(d.baseWidth); 
+    const houseHeight = yScale(d.baseHeight + d.roofHeight);
     const roofWidth = xScale(d.roofWidth);  
     const doorW = xScale(d3.min(currentData, d => d.baseWidth) / 4);
     const doorH = yScale(d3.min(currentData, d => d.baseHeight) / 2);
+    
+    const windowWidth = xScale(d3.min(currentData, d => d.roofWidth) / 8);
+    const minRoofHeight = d3.min(currentData, d => d.roofHeight); 
+    const windowHeight = yScale(minRoofHeight / 2.5);
+    const yWindow = yScale(d.baseHeight + (d.roofHeight/2) + (minRoofHeight/4)); 
           
     // definition of vertices of the polygon (triangle)
     const x1 = xCenter - roofWidth / 2,  y1 = baseHeight;
@@ -130,8 +135,31 @@ function drawHouses(selection) {
       .attr("width", doorW)
       .attr("height", ((bandScale.bandwidth()) * 1.3) - doorH)
       .attr("fill", "brown")
-      .on("click", () => sortWidth("baseWidth", "roofWidth"));        /* sort houses after click by max of baseWidth and roofWidth
-                                                                        for each houses */ 
+      .on("click", () => {
+        currentData.sort((a, b) => a.baseWidth - b.baseWidth);
+        console.log("Sorted dataset: ");
+        console.log(currentData);
+        updateDrawing(currentData);});                                  /*  sort data after click by baseWidth */
+    
+
+
+    // construction of the window
+    group.append("rect")
+      .attr("class", "clickableWindow")
+      .attr("x", xCenter - windowWidth / 2)
+      .attr("y", yWindow)
+      .attr("width", windowWidth)
+      .attr("height", ((bandScale.bandwidth()) * 1.3) - windowHeight)
+      .attr("fill", "lightblue")
+      .on("click", () => {
+        currentData.sort((a, b) => a.roofWidth - b.roofWidth);
+        console.log("Sorted dataset: ");
+        console.log(currentData);
+        updateDrawing(currentData);});                                   /*  sort data after click by roofWidth */
+    
+    
+    
+    
   });
 }
 
@@ -146,11 +174,16 @@ function updateHouses(selection) {
 
     // scaled parameters
     const baseHeight = yScale(d.baseHeight);
-    const baseWidth = xScale(d.baseWidth);   
-    const houseHeight = yScale(d.baseHeight + d.roofHeight);   
-    const roofWidth = xScale(d.roofWidth); 
+    const baseWidth = xScale(d.baseWidth);     
+    const roofWidth = xScale(d.roofWidth);   
+    const houseHeight = yScale(d.baseHeight + d.roofHeight);
     const doorW = xScale(d3.min(currentData, d => d.baseWidth) / 4);
     const doorH = yScale(d3.min(currentData, d => d.baseHeight) / 2);
+
+    const windowWidth = xScale(d3.min(currentData, d => d.roofWidth) / 8);
+    const minRoofHeight = d3.min(currentData, d => d.roofHeight); 
+    const windowHeight = yScale(minRoofHeight / 2.5);
+    const yWindow = yScale(d.baseHeight + (d.roofHeight/2) + (minRoofHeight/4)); 
 
     const x1 = xCenter - roofWidth / 2,  y1 = baseHeight;
     const x2 = xCenter, y2 = houseHeight;
@@ -175,6 +208,12 @@ function updateHouses(selection) {
       .attr("y", doorH)
       .attr("width", doorW)
       .attr("height", ((bandScale.bandwidth()) * 1.3) - doorH);
+
+    t.select("rect.clickableWindow")
+      .attr("x", xCenter - windowWidth / 2)
+      .attr("y", yWindow)
+      .attr("width", windowWidth)
+      .attr("height", ((bandScale.bandwidth()) * 1.3) - windowHeight);
   });
 }
 
@@ -210,21 +249,6 @@ function sortData(key1, key2) {
     const compare1 = d3.ascending(a[key1], b[key1]);
     return compare1 !== 0 ? compare1 : d3.ascending(a[key2], b[key2]);
   });
-
-  console.log("Sorted dataset: ");
-  console.log(currentData);
-
-  updateDrawing(currentData);
-}
-
-// sorting by max of key1 and key2 for each houses
-function sortWidth(key1, key2) {
-  currentData.sort((a, b) =>
-    d3.ascending(
-      Math.max(a[key1], a[key2]),
-      Math.max(b[key1], b[key2])
-    )
-  );
 
   console.log("Sorted dataset: ");
   console.log(currentData);

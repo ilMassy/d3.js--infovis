@@ -13,6 +13,11 @@
       stroke-width: 2px;
 }
 
+.clickableWindow:hover {
+      stroke: #000;
+      stroke-width: 2px;
+}
+
 .house {
     cursor: pointer;
 }
